@@ -6,6 +6,7 @@ import com.mavenusrs.domain.currency_conversion.model.Quote
 interface CurrencyConversionRepository {
 
     suspend fun getCurrencies() : List<Currency>
-    suspend fun getQuotes() : List<Quote>
+    // for unsubscribed version of api, source will be USD
+    suspend fun getQuotes(source: String = "USD") : List<Quote>
 
 }

@@ -10,10 +10,13 @@ import com.mavenusrs.domain.currency_conversion.GetCurrenciesUseCase
 import com.mavenusrs.domain.currency_conversion.GetCurrencyQuotesUseCase
 import com.mavenusrs.domain.currency_conversion.model.Currency
 import com.mavenusrs.domain.currency_conversion.model.Quote
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import retrofit2.HttpException
+import javax.inject.Inject
 
-class ConversionViewModel(
+@HiltViewModel
+class ConversionViewModel @Inject constructor(
     private val getCurrenciesUseCase: GetCurrenciesUseCase,
     private val getCurrencyQuotesUseCase: GetCurrencyQuotesUseCase,
     private val coroutineContextProvider: CoroutineContextProvider
@@ -54,13 +57,13 @@ class ConversionViewModel(
         return quotesLiveData
     }
 
-    fun fetchQuotes() {
+        fun fetchQuotes(source: String, amount: Double) {
         quotesLiveData.value = Resource.Loading
 
         viewModelScope.launch(coroutineExceptionHandler) {
 
             val data = withContext(coroutineContextProvider.IO) {
-                getCurrencyQuotesUseCase.getQuotes()
+                getCurrencyQuotesUseCase.getQuotes(source, amount)
             }
             quotesLiveData.value =
                 Resource.Success(data)

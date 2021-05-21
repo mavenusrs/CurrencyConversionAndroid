@@ -57,7 +57,7 @@ class ConversionViewModelTest : TestCase() {
     @Test
     fun `test return items when get currencies from server return list`() =
         testCoroutineRule.runBlockTest {
-            val expectedItems = listOf(Currency(1))
+            val expectedItems = listOf(Currency(1, "USD", "American Dollar"))
             // assume given
             Mockito
                 .doReturn(expectedItems)
@@ -148,14 +148,14 @@ class ConversionViewModelTest : TestCase() {
         testCoroutineRule.runBlockTest {
 
             // assume given
-            val expectedItems = listOf(Quote(1))
+            val expectedItems = listOf(Quote("USD"))
             Mockito
                 .doReturn(expectedItems)
                 .`when`(currencyConversionRepository)
-                .getQuotes()
+                .getQuotes("USD")
 
             // call
-            viewModel.fetchQuotes()
+            viewModel.fetchQuotes("USD", 12.0)
 
             // verify
             val argumentCaptor = ArgumentCaptor.forClass(Resource::class.java)
@@ -181,10 +181,10 @@ class ConversionViewModelTest : TestCase() {
             Mockito
                 .doReturn(emptyList<Quote>())
                 .`when`(currencyConversionRepository)
-                .getQuotes()
+                .getQuotes("USD")
 
             // call
-            viewModel.fetchQuotes()
+            viewModel.fetchQuotes("USD", 12.0)
 
             // verify
             val argumentCaptor = ArgumentCaptor.forClass(Resource::class.java)
@@ -210,11 +210,11 @@ class ConversionViewModelTest : TestCase() {
             val expectedErrorCode = MyThrowable.General_error_code
             val expectedThrowable = Throwable(errorMessage)
 
-            Mockito.`when`(currencyConversionRepository.getQuotes())
+            Mockito.`when`(currencyConversionRepository.getQuotes("USD"))
                 .thenAnswer { throw expectedThrowable }
 
             // when call
-            viewModel.fetchQuotes()
+            viewModel.fetchQuotes("USD", 12.0)
 
             // then verify
             val argumentCaptor = ArgumentCaptor.forClass(Resource::class.java)
