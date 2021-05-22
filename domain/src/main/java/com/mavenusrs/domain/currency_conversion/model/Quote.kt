@@ -5,9 +5,10 @@ data class Quote(
     val source: String,
     val distCode: String,
     val distRate: Double = 1.0,
-    var calculatedRate: Double = 0.0
-) {
-    constructor(distCode: String) : this(1, "", distCode, 1.0, 1.0)
+    var calculatedRate: Double = 0.0,
+    var distName: String,
+    ) {
+    constructor(distCode: String) : this(1, "", distCode, 1.0, 1.0, "")
 
     override fun equals(other: Any?): Boolean {
         other?.apply {

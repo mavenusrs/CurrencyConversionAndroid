@@ -75,7 +75,18 @@ class CurrencyConversionRepositoryImpl @Inject constructor(
             }
         }
 
-        return Response(freshResponse, mapQuotesEntityToQuotes(quotesEntities))
+        //lazy way to add currency names to quotes using Brute force
+
+        val response = Response(freshResponse, mapQuotesEntityToQuotes(quotesEntities))
+
+        val currencies = getCurrencies()
+        response.data?.map { quote->
+            val item = currencies.data?.find {
+                it.currencyCode == quote.distCode
+            }
+            quote.distName = item?.currencyName?:""
+        }
+        return response
     }
 
 

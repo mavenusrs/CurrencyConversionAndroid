@@ -10,6 +10,7 @@ import com.mavenusrs.domain.currency_conversion.GetCurrenciesUseCase
 import com.mavenusrs.domain.currency_conversion.GetCurrencyQuotesUseCase
 import com.mavenusrs.domain.currency_conversion.model.Currency
 import com.mavenusrs.domain.currency_conversion.model.Quote
+import com.mavenusrs.domain.currency_conversion.model.Response
 import com.mavenusrs.domain.currency_conversion.repository.CurrencyConversionRepository
 import junit.framework.TestCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,8 +22,7 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
@@ -60,7 +60,7 @@ class ConversionViewModelTest : TestCase() {
             val expectedItems = listOf(Currency(1, "USD", "American Dollar"))
             // assume given
             Mockito
-                .doReturn(expectedItems)
+                .doReturn(Response(false, expectedItems))
                 .`when`(currencyConversionRepository)
                 .getCurrencies()
 
@@ -88,7 +88,7 @@ class ConversionViewModelTest : TestCase() {
 
             // assume given
             Mockito
-                .doReturn(emptyList<Currency>())
+                .doReturn(Response(false, emptyList<Currency>()))
                 .`when`(currencyConversionRepository)
                 .getCurrencies()
 
@@ -105,6 +105,64 @@ class ConversionViewModelTest : TestCase() {
                 assertEquals(Resource.Loading, values[0])
                 assertEquals(
                     Resource.Success<List<*>>(emptyList<Currency>()), values[1]
+                )
+            }
+
+        }
+
+    @Test
+    fun `test return fresh data when get fresh currencies from server return list `() =
+        testCoroutineRule.runBlockTest {
+            val expectedItems = listOf(Currency(1, "USD", "American Dollar"))
+            val expectedFreshness = true
+            // assume given
+            Mockito
+                .doReturn(Response(expectedFreshness, expectedItems))
+                .`when`(currencyConversionRepository)
+                .getCurrencies()
+
+            // call
+            viewModel.fetchCurrencies()
+
+            // verify
+            val argumentCaptor = ArgumentCaptor.forClass(Resource::class.java)
+            argumentCaptor.run {
+
+                verify(observer, times(2)).onChanged(capture())
+
+                val values = allValues
+                assertEquals(Resource.Loading, values[0])
+                assertEquals(
+                    expectedFreshness, values[1].freshData
+                )
+            }
+
+        }
+
+    @Test
+    fun `test return obsolete data when get obsolete currencies from server return list `() =
+        testCoroutineRule.runBlockTest {
+            val expectedItems = listOf(Currency(1, "USD", "American Dollar"))
+            val expectedFreshness = false
+            // assume given
+            Mockito
+                .doReturn(Response(expectedFreshness, expectedItems))
+                .`when`(currencyConversionRepository)
+                .getCurrencies()
+
+            // call
+            viewModel.fetchCurrencies()
+
+            // verify
+            val argumentCaptor = ArgumentCaptor.forClass(Resource::class.java)
+            argumentCaptor.run {
+
+                verify(observer, times(2)).onChanged(capture())
+
+                val values = allValues
+                assertEquals(Resource.Loading, values[0])
+                assertEquals(
+                    expectedFreshness, values[1].freshData
                 )
             }
 
@@ -148,9 +206,9 @@ class ConversionViewModelTest : TestCase() {
         testCoroutineRule.runBlockTest {
 
             // assume given
-            val expectedItems = listOf(Quote("USD"))
+            val expectedResult = listOf(Quote("USD"))
             Mockito
-                .doReturn(expectedItems)
+                .doReturn(Response(true, expectedResult))
                 .`when`(currencyConversionRepository)
                 .getQuotes("USD")
 
@@ -166,7 +224,7 @@ class ConversionViewModelTest : TestCase() {
                 val values = allValues
                 assertEquals(Resource.Loading, values[0])
                 assertEquals(
-                    Resource.Success<List<*>>(expectedItems), values[1]
+                    Resource.Success<List<*>>(expectedResult), values[1]
                 )
             }
 
@@ -178,8 +236,9 @@ class ConversionViewModelTest : TestCase() {
         testCoroutineRule.runBlockTest {
 
             // assume given
+            val expectedResult = Response(true, emptyList<Quote>())
             Mockito
-                .doReturn(emptyList<Quote>())
+                .doReturn(expectedResult)
                 .`when`(currencyConversionRepository)
                 .getQuotes("USD")
 
@@ -195,7 +254,7 @@ class ConversionViewModelTest : TestCase() {
                 val values = allValues
                 assertEquals(Resource.Loading, values[0])
                 assertEquals(
-                    Resource.Success<List<*>>(emptyList<Quote>()), values[1]
+                    Resource.Success(emptyList<Quote>()), values[1]
                 )
             }
 
@@ -228,6 +287,66 @@ class ConversionViewModelTest : TestCase() {
                     assertEquals((this as Resource.Failed).myThrowable.message, errorMessage)
                     assertEquals(this.myThrowable.errorCode, expectedErrorCode)
                 }
+            }
+
+        }
+
+    @Test
+    fun `test return fresh items when get fresh currency quotes from server return list`() =
+        testCoroutineRule.runBlockTest {
+
+            // assume given
+            val expectedResult = listOf(Quote("USD"))
+            val expectedFreshNess = true
+            Mockito
+                .doReturn(Response(expectedFreshNess, expectedResult))
+                .`when`(currencyConversionRepository)
+                .getQuotes("USD")
+
+            // call
+            viewModel.fetchQuotes("USD", 12.0)
+
+            // verify
+            val argumentCaptor = ArgumentCaptor.forClass(Resource::class.java)
+            argumentCaptor.run {
+
+                verify(observer, times(2)).onChanged(capture())
+
+                val values = allValues
+                assertEquals(Resource.Loading, values[0])
+                assertEquals(
+                    expectedFreshNess, values[1].freshData
+                )
+            }
+
+        }
+
+    @Test
+    fun `test return obsolete items when get obsolete currency quotes from server return list`() =
+        testCoroutineRule.runBlockTest {
+
+            // assume given
+            val expectedResult = listOf(Quote("USD"))
+            val expectedFreshNess = false
+            Mockito
+                .doReturn(Response(expectedFreshNess, expectedResult))
+                .`when`(currencyConversionRepository)
+                .getQuotes("USD")
+
+            // call
+            viewModel.fetchQuotes("USD", 12.0)
+
+            // verify
+            val argumentCaptor = ArgumentCaptor.forClass(Resource::class.java)
+            argumentCaptor.run {
+
+                verify(observer, times(2)).onChanged(capture())
+
+                val values = allValues
+                assertEquals(Resource.Loading, values[0])
+                assertEquals(
+                    expectedFreshNess, values[1].freshData
+                )
             }
 
         }

@@ -12,7 +12,7 @@ fun JsonObject.mapToCurrencyEntities(): List<CurrencyEntity> {
 
     val keySet = this.keySet()
     keySet.forEach {
-        val item = CurrencyEntity(currencyList.count(), it, this.get(it).asString)
+        val item = CurrencyEntity(currencyList.count() + 1, it, this.get(it).asString)
         currencyList.add(item)
     }
     return currencyList
@@ -24,11 +24,12 @@ fun JsonObject.mapToQuoteEntities(source: String, timeStamp: Long): List<QuoteEn
 
     val keySet = this.keySet()
     keySet.forEach {
-        val item = QuoteEntity(quoteList.count(),
+        val item = QuoteEntity(quoteList.count() + 1,
             source,
             timeStamp,
             it.substringAfter(source),
             this.get(it).asDouble,
+            ""
         )
         quoteList.add(item)
     }
@@ -42,6 +43,7 @@ fun mapQuotesEntityToQuotes(quotesEntities: List<QuoteEntity>) =
             source = it.source,
             distCode = it.distCode,
             distRate = it.distRate,
+            distName = it.distName
         )
     }
 

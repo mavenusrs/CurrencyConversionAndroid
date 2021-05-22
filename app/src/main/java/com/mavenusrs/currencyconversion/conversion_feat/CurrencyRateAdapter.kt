@@ -28,7 +28,9 @@ class CurrencyRateAdapter(private val items: List<Quote>): RecyclerView.Adapter<
     class CurrencyRateVH(private val itemBinding: RateItemBinding): RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(item: Quote) {
             itemBinding.tvRate.text = "${item.calculatedRate}"
-            itemBinding.tvCurrency.text = item.distCode
+
+            val currency = "${item.distCode}: ${item.distName}"
+            itemBinding.tvCurrency.text = currency
         }
 
     }

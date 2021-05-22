@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "43af6a04e415a5814fd7a793fd522476",
+    "identityHash": "cd5b3311d7eb2fbc32d77313b46f6b17",
     "entities": [
       {
         "tableName": "currency_tbl",
@@ -38,7 +38,7 @@
       },
       {
         "tableName": "quote_tbl",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `source` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `dist_code` TEXT NOT NULL, `dist_rate` REAL NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `source` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `dist_code` TEXT NOT NULL, `dist_rate` REAL NOT NULL, `dist_name` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -69,6 +69,12 @@
             "columnName": "dist_rate",
             "affinity": "REAL",
             "notNull": true
+          },
+          {
+            "fieldPath": "distName",
+            "columnName": "dist_name",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -84,7 +90,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '43af6a04e415a5814fd7a793fd522476')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cd5b3311d7eb2fbc32d77313b46f6b17')"
     ]
   }
 }

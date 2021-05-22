@@ -20,4 +20,6 @@ data class QuoteEntity (
     var distCode : String,
     @ColumnInfo(name = "dist_rate")
     var distRate : Double,
+    @ColumnInfo(name = "dist_name")
+    var distName : String,
 )

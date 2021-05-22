@@ -27,7 +27,7 @@ private val quoteDAO : QuoteDAO,
     }
 
     suspend fun insetCurrencies(currencies : List<CurrencyEntity>) {
-        currencyDAO.deleteAll()
+//        currencyDAO.deleteAll()
         currencyDAO.insetAllCurrencies(currencies)
     }
 }

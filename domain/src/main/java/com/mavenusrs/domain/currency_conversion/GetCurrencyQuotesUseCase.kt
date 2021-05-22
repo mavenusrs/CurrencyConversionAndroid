@@ -10,8 +10,9 @@ class GetCurrencyQuotesUseCase @Inject constructor(private val currencyConversio
     suspend fun getQuotes(source: String, amount: Double): Response<List<Quote>> {
         val resQuotes = currencyConversionRepository.getQuotes()
         return resQuotes.apply {
-            val quotes = resQuotes.data
-            quotes?.also {quoteList->
+
+            val quoteList = resQuotes.data
+            if (!quoteList.isNullOrEmpty()) {
                 val usdSourceQuote = quoteList[quoteList.indexOf(Quote(source))]
                 val toUSDTotalAmount = amount / usdSourceQuote.distRate
                 quoteList.map { quote->
