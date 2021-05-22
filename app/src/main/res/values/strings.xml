@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">CurrencyConversion</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="currency_amount_to_be_exchanged">Currency amount to be exchanged</string>
+    <string name="please_enter_the_amount_disc">Please enter the amount to calculate its exchange</string>
+    <string name="select_currency_description">Please select currency as source currency</string>
+    <string name="exchange_rate_desc">Exchange rate</string>
+    <string name="get_rate_exchange_desc">Get rate exchange now</string>
+    <string name="exchange">Exchange</string>
+    <string name="empty_amount_warnning">Please, enter the amount to get its rates of changes</string>
+    <string name="undefined_rate">Undefined rate</string>
+    <string name="undefined_currency">Undefined Currency</string>
 </resources>

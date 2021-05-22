@@ -18,7 +18,7 @@ data class Quote(
     }
 
     override fun toString(): String {
-        return "Source currency $source distication Code $distCode with rate per unit $distRate" +
+        return "Source currency $source destination Code $distCode with rate per unit $distRate" +
                 " the calculate total rate $calculatedRate "
     }
 }

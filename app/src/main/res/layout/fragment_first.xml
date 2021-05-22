@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".conversion_feat.FirstFragment">
+
+    <Button
+        android:id="@+id/btn_rate_calc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/_8dps"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:contentDescription="@string/get_rate_exchange_desc"
+        android:text="@string/exchange"
+        app:layout_constraintEnd_toStartOf="@+id/et_account"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_input_get" />
+
+    <ProgressBar
+        android:id="@+id/pb_loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_8dps"
+        android:contentDescription="@string/exchange_rate_desc"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/v_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/rv_quotes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sp_currency" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/et_account"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_48dps"
+        android:layout_margin="@dimen/_8dps"
+        android:hint="@string/currency_amount_to_be_exchanged"
+        android:inputType="number"
+        android:textColorHint="@color/et_hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TextContrastCheck" />
+
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/sp_currency"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_48dps"
+        android:layout_margin="@dimen/_8dps"
+        android:contentDescription="@string/select_currency_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_account" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_quotes"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/_8dps"
+        android:contentDescription="@string/exchange_rate_desc"
+        android:scrollbars="vertical"
+        app:layout_constrainedHeight="true"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintTop_toBottomOf="@id/v_divider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

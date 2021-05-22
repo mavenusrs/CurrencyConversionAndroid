@@ -15,10 +15,10 @@ abstract class CurrencyConversionModule {
 //    fun provideGetCurrenciesUseCase() : GetCurrenciesUseCase {
 //        return GetCurrenciesUseCase(CurrencyConversionRepositoryImpl())
 //    }
-
-    @Binds
-    abstract fun bindCurrencyConversionRepository(
-        currencyConversionRepository:
-        CurrencyConversionRepositoryImpl
-    ): CurrencyConversionRepository
+//
+//    @Binds
+//    abstract fun bindCurrencyConversionRepository(
+//        currencyConversionRepository:
+//        CurrencyConversionRepositoryImpl
+//    ): CurrencyConversionRepository
 }
