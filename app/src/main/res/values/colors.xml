@@ -11,4 +11,5 @@
 
     <color name="green">#FF018786</color>
     <color name="yellow">#FFEB3B</color>
+    <color name="gray">#37000000</color>
 </resources>

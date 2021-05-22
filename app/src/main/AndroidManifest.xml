@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CurrencyConversion"
         android:usesCleartextTraffic="true"
-        tools:targetApi="n">
+        tools:targetApi="n"
+        tools:ignore="AllowBackup">
         <activity
             android:name=".conversion_feat.HomeActivity"
             android:exported="true"

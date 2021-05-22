@@ -21,7 +21,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -59,8 +58,7 @@ class ConversionViewModelTest : TestCase() {
         testCoroutineRule.runBlockTest {
             val expectedItems = listOf(Currency(1, "USD", "American Dollar"))
             // assume given
-            Mockito
-                .doReturn(Response(false, expectedItems))
+            doReturn(Response(false, expectedItems))
                 .`when`(currencyConversionRepository)
                 .getCurrencies()
 
@@ -87,8 +85,7 @@ class ConversionViewModelTest : TestCase() {
         testCoroutineRule.runBlockTest {
 
             // assume given
-            Mockito
-                .doReturn(Response(false, emptyList<Currency>()))
+            doReturn(Response(false, emptyList<Currency>()))
                 .`when`(currencyConversionRepository)
                 .getCurrencies()
 
@@ -116,8 +113,7 @@ class ConversionViewModelTest : TestCase() {
             val expectedItems = listOf(Currency(1, "USD", "American Dollar"))
             val expectedFreshness = true
             // assume given
-            Mockito
-                .doReturn(Response(expectedFreshness, expectedItems))
+            doReturn(Response(expectedFreshness, expectedItems))
                 .`when`(currencyConversionRepository)
                 .getCurrencies()
 
@@ -145,8 +141,7 @@ class ConversionViewModelTest : TestCase() {
             val expectedItems = listOf(Currency(1, "USD", "American Dollar"))
             val expectedFreshness = false
             // assume given
-            Mockito
-                .doReturn(Response(expectedFreshness, expectedItems))
+            doReturn(Response(expectedFreshness, expectedItems))
                 .`when`(currencyConversionRepository)
                 .getCurrencies()
 
@@ -177,7 +172,7 @@ class ConversionViewModelTest : TestCase() {
             val expectedErrorCode = MyThrowable.General_error_code
             val expectedThrowable = Throwable(errorMessage)
 
-            Mockito.`when`(currencyConversionRepository.getCurrencies())
+            `when`(currencyConversionRepository.getCurrencies())
                 .thenAnswer { throw expectedThrowable }
 
             // when call
@@ -207,8 +202,7 @@ class ConversionViewModelTest : TestCase() {
 
             // assume given
             val expectedResult = listOf(Quote("USD"))
-            Mockito
-                .doReturn(Response(true, expectedResult))
+            doReturn(Response(true, expectedResult))
                 .`when`(currencyConversionRepository)
                 .getQuotes("USD")
 
@@ -237,8 +231,7 @@ class ConversionViewModelTest : TestCase() {
 
             // assume given
             val expectedResult = Response(true, emptyList<Quote>())
-            Mockito
-                .doReturn(expectedResult)
+            doReturn(expectedResult)
                 .`when`(currencyConversionRepository)
                 .getQuotes("USD")
 
@@ -269,7 +262,7 @@ class ConversionViewModelTest : TestCase() {
             val expectedErrorCode = MyThrowable.General_error_code
             val expectedThrowable = Throwable(errorMessage)
 
-            Mockito.`when`(currencyConversionRepository.getQuotes("USD"))
+            `when`(currencyConversionRepository.getQuotes("USD"))
                 .thenAnswer { throw expectedThrowable }
 
             // when call
@@ -298,8 +291,7 @@ class ConversionViewModelTest : TestCase() {
             // assume given
             val expectedResult = listOf(Quote("USD"))
             val expectedFreshNess = true
-            Mockito
-                .doReturn(Response(expectedFreshNess, expectedResult))
+            doReturn(Response(expectedFreshNess, expectedResult))
                 .`when`(currencyConversionRepository)
                 .getQuotes("USD")
 
@@ -328,8 +320,7 @@ class ConversionViewModelTest : TestCase() {
             // assume given
             val expectedResult = listOf(Quote("USD"))
             val expectedFreshNess = false
-            Mockito
-                .doReturn(Response(expectedFreshNess, expectedResult))
+            doReturn(Response(expectedFreshNess, expectedResult))
                 .`when`(currencyConversionRepository)
                 .getQuotes("USD")
 
