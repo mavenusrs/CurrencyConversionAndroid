@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">CurrencyConversion</string>
     <string name="title_activity_home">HomeActivity</string>
-    <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
@@ -15,7 +14,10 @@
     <string name="exchange_rate_desc">Exchange rate</string>
     <string name="get_rate_exchange_desc">Get rate exchange now</string>
     <string name="exchange">Exchange</string>
-    <string name="empty_amount_warnning">Please, enter the amount to get its rates of changes</string>
+    <string name="empty_amount_warning">Please, enter the amount to get its rates of changes</string>
     <string name="undefined_rate">Undefined rate</string>
     <string name="undefined_currency">Undefined Currency</string>
+    <string name="quotes_data_disc">quotes data status</string>
+    <string name="fresh_data">Fresh Data loaded</string>
+    <string name="obsolete_data">obsolete data loaded, please check your network, and load it again</string>
 </resources>

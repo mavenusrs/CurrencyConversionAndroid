@@ -12,6 +12,7 @@ import com.mavenusrs.currency_conversion.data.repository.map.mapToCurrencyEntiti
 import com.mavenusrs.currency_conversion.data.repository.map.mapToQuoteEntities
 import com.mavenusrs.domain.currency_conversion.model.Currency
 import com.mavenusrs.domain.currency_conversion.model.Quote
+import com.mavenusrs.domain.currency_conversion.model.Response
 import com.mavenusrs.domain.currency_conversion.repository.CurrencyConversionRepository
 import javax.inject.Inject
 
@@ -21,11 +22,14 @@ class CurrencyConversionRepositoryImpl @Inject constructor(
     private val sharedPreferenceHelper: SharedPreferenceHelper,
 ) : CurrencyConversionRepository {
 
-    override suspend fun getCurrencies(): List<Currency> {
-        val isFreshData = isFreshData("list")
-        val currenciesEntities: List<CurrencyEntity>?
-        if (isFreshData) {
+    override suspend fun getCurrencies(): Response<List<Currency>> {
+        val isFreshCachedData = isFreshCachedData("list")
+        var currenciesEntities: List<CurrencyEntity>?
+        val freshResponse: Boolean
+
+        if (isFreshCachedData) {
             currenciesEntities = currencyConversionLocalDS.getCurrencies()
+            freshResponse = true
         } else {
             currenciesEntities = currencyConversionRemoteDS
                 .getCurrencies().currencies.mapToCurrencyEntities()
@@ -34,19 +38,26 @@ class CurrencyConversionRepositoryImpl @Inject constructor(
             if (currenciesEntities.isNotEmpty()) {
                 currencyConversionLocalDS.insetCurrencies(currenciesEntities)
                 resetTimeStamp("list")
+                freshResponse = true
+            } else {
+                currenciesEntities = currencyConversionLocalDS.getCurrencies()
+                freshResponse = false
             }
         }
 
-        return mapCurrencyEntitiesTOCurrencies(currenciesEntities)
-
+        val currencies = mapCurrencyEntitiesTOCurrencies(currenciesEntities)
+        return Response(freshResponse, currencies)
     }
 
-    override suspend fun getQuotes(source: String): List<Quote> {
-        val quotesEntities: List<QuoteEntity>?
+    override suspend fun getQuotes(source: String): Response<List<Quote>> {
+        var quotesEntities: List<QuoteEntity>?
+        val freshResponse: Boolean
 
-        val isFreshData = isFreshData("live-$source")
-        if (isFreshData) {
+        val isFreshCachedData = isFreshCachedData("live-$source")
+
+        if (isFreshCachedData) {
             quotesEntities = currencyConversionLocalDS.getQuotes(source)
+            freshResponse = true
         } else {
             val quotesResponse = currencyConversionRemoteDS
                 .getQuotes(source)
@@ -57,14 +68,18 @@ class CurrencyConversionRepositoryImpl @Inject constructor(
             if (quotesEntities.isNotEmpty()) {
                 currencyConversionLocalDS.insetQuotes(source, quotesEntities)
                 resetTimeStamp("live-$source")
+                freshResponse = true
+            } else {
+                quotesEntities = currencyConversionLocalDS.getQuotes(source)
+                freshResponse = false
             }
         }
 
-        return mapQuotesEntityToQuotes(quotesEntities)
+        return Response(freshResponse, mapQuotesEntityToQuotes(quotesEntities))
     }
 
 
-    private fun isFreshData(path: String): Boolean {
+    private fun isFreshCachedData(path: String): Boolean {
         val timeStamp = sharedPreferenceHelper.getAPITimeStamp(path)
         return (SystemClock.elapsedRealtime() - timeStamp) < 30 * 60 * 1000
     }

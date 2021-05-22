@@ -44,11 +44,13 @@ class ConversionViewModel @Inject constructor(
 
         viewModelScope.launch(coroutineExceptionHandler) {
 
-            val data = withContext(coroutineContextProvider.IO) {
+            val response = withContext(coroutineContextProvider.IO) {
                 getCurrenciesUseCase.getCurrencies()
             }
-            currenciesLiveData.value =
-                Resource.Success(data)
+            val successResource = Resource.Success(response.data)
+            successResource.freshData = response.fresh
+
+            currenciesLiveData.value = successResource
 
         }
     }
@@ -62,11 +64,13 @@ class ConversionViewModel @Inject constructor(
 
         viewModelScope.launch(coroutineExceptionHandler) {
 
-            val data = withContext(coroutineContextProvider.IO) {
+            val response = withContext(coroutineContextProvider.IO) {
                 getCurrencyQuotesUseCase.getQuotes(source, amount)
             }
-            quotesLiveData.value =
-                Resource.Success(data)
+            val successResource = Resource.Success(response.data)
+            successResource.freshData = response.fresh
+
+            quotesLiveData.value = successResource
 
         }
     }

@@ -1,6 +1,5 @@
 package com.mavenusrs.currencyconversion.conversion_feat
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,20 +9,23 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatSpinner
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.mavenusrs.currencyconversion.R
+import com.mavenusrs.currencyconversion.common.DeviceUtils
 import com.mavenusrs.currencyconversion.common.Resource
 import com.mavenusrs.currencyconversion.databinding.FragmentFirstBinding
 import com.mavenusrs.domain.currency_conversion.model.Currency
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * A simple [FirstFragment] subclass as the default destination in the navigation.
+ * A simple [CurrencyConversionFragment] subclass as the default destination in the navigation.
  */
 @AndroidEntryPoint
-class FirstFragment : Fragment() {
+class CurrencyConversionFragment : Fragment() {
 
     private lateinit var amountEditText: AppCompatEditText
     private lateinit var currencySpinner: AppCompatSpinner
@@ -60,9 +62,7 @@ class FirstFragment : Fragment() {
 
     private fun initViews() {
         currencySpinner = binding.spCurrency
-
         amountEditText = binding.etAccount
-
         binding.rvQuotes.layoutManager = GridLayoutManager(requireContext(), 2)
     }
 
@@ -70,24 +70,39 @@ class FirstFragment : Fragment() {
         if (amount.isEmpty()) {
             Toast.makeText(
                 requireContext(),
-                getString(R.string.empty_amount_warnning), Toast.LENGTH_LONG
+                getString(R.string.empty_amount_warning), Toast.LENGTH_LONG
             ).show()
         } else {
+            DeviceUtils.hideKeyboard(requireActivity())
+
             conversionViewModel.fetchQuotes(selectedCurrency.currencyCode, amount.toDouble())
             conversionViewModel.getQuotes().observe(viewLifecycleOwner, {
-                it?.also {
-                    when (it) {
+                it?.also {resource ->
+                    when (resource) {
                         is Resource.Success -> {
                             hideLoading()
-                            it.data?.apply {
+                            resource.data?.apply {
                                 val currencyAdapter = CurrencyRateAdapter(this)
                                 binding.rvQuotes.adapter = currencyAdapter
                                 currencyAdapter.notifyItemRangeInserted(0, this.size)
                             }
+                            resource.freshData?.also { isFresh ->
+                                binding.tvDataStatus.apply {
+                                    visibility = View.VISIBLE
+                                    if (isFresh) {
+                                        text = getString(R.string.fresh_data)
+                                        setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green))
+                                    } else {
+                                        text = getString(R.string.obsolete_data)
+                                        setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.yellow))
+                                    }
+                                }
+                            }
+
                         }
                         is Resource.Failed -> {
                             hideLoading()
-                            it.myThrowable.message?.let { message ->
+                            resource.myThrowable.message?.let { message ->
                                 Toast.makeText(
                                     requireContext(),
                                     message, Toast.LENGTH_LONG
@@ -135,6 +150,7 @@ class FirstFragment : Fragment() {
 
                     }
                     is Resource.Loading -> {
+                        binding.tvDataStatus.visibility = View.VISIBLE
                         showLoading()
                     }
                 }

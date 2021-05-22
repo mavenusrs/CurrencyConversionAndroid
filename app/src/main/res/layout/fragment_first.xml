@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".conversion_feat.FirstFragment">
+    tools:context=".conversion_feat.CurrencyConversionFragment">
 
     <Button
         android:id="@+id/btn_rate_calc"
@@ -17,7 +17,7 @@
         android:text="@string/exchange"
         app:layout_constraintEnd_toStartOf="@+id/et_account"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dataStatus"
         app:srcCompat="@android:drawable/ic_input_get" />
 
     <ProgressBar
@@ -28,6 +28,17 @@
         android:contentDescription="@string/exchange_rate_desc"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_dataStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/_8dps"
+        android:contentDescription="@string/quotes_data_disc"
+        android:padding="@dimen/_8dps"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,7 +61,7 @@
         android:inputType="number"
         android:textColorHint="@color/et_hint"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dataStatus"
         tools:ignore="TextContrastCheck" />
 
 
@@ -73,9 +84,9 @@
         android:scrollbars="vertical"
         app:layout_constrainedHeight="true"
         app:layout_constrainedWidth="true"
-        app:layout_constraintTop_toBottomOf="@id/v_divider"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/v_divider" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
